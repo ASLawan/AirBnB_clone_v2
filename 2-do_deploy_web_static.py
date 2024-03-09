@@ -11,6 +11,7 @@ from datetime import datetime
 env.hosts = ['54.236.24.199', '34.207.212.193']
 env.user = 'ubuntu'
 
+
 def do_deploy(archive_path):
     """ Function that distributes archived files to servers with Fabric"""
     if not exists(archive_path):
@@ -31,4 +32,3 @@ def do_deploy(archive_path):
     except Exception as e:
         print(e)
         return False
-
