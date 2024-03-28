@@ -1,30 +1,40 @@
 #!/usr/bin/env bash
 # Configure nginx as web server
-if ! command -v nginx &> /dev/null;
+if ! which nginx &> /dev/null;
 then
 	sudo apt-get update
 	sudo apt-get -y nginx
 fi
 
-mkdir -p /data/web_static/releases/test
+mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared
-echo "<html><head></head><body><h1>Hello Lawan!</h1></body></html>" > /data/web_static/releases/test/index.html
 
-rm -f /data/web_static/current && ln -s /data/web_static/releases/test /data/web_static/current
+echo "<html>
+	<head></head>
+	<body>
+	<h1>Hello Lawan!</h1>
+	</body>
+	</html>" | sudo tee /data/web_static/releases/test/index.html
 
-sudo chown -R ubuntu:ubuntu /data
+sudo rm -f /data/web_static/current
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-cat << EOF > /etc/nginx/sites-available/default
+sudo chown -R ubuntu:ubuntu /data/
+
+config_file="/etc/nginx/sites-available/default"
+nginx_config="
 server {
 	listen 80;
-	server_name localhost;
+	listen [::]:80;
+	server_name _;
 	
 	location /hbnb_static {
 		alias /data/web_static/current/;
 	}
 }
-EOF
+"
 
-#sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sudo cp $config_file $config_file.bak
+echo "$nginx_config" | sudo tee $config_file > /dev/null
 sudo service nginx restart
 exit 0
