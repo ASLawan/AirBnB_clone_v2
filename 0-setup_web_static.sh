@@ -10,11 +10,12 @@ mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared
 
 echo "<html>
-	<head></head>
+	<head>
+	</head>
 	<body>
-	<h1>Hello Lawan!</h1>
+	   Holberton School
 	</body>
-	</html>" | sudo tee /data/web_static/releases/test/index.html
+     </html>" | sudo tee /data/web_static/releases/test/index.html
 
 sudo rm -f /data/web_static/current
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
